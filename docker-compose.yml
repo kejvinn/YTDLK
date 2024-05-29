@@ -1,7 +1,7 @@
 services:
     ytdlk.io:
         build:
-            context: ./docker/8.3
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
