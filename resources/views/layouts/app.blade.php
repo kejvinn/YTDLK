@@ -7,7 +7,7 @@
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="flex-container">
+<body>
 @yield('content')
 @livewireScripts
 </body>

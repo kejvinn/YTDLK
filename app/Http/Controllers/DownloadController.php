@@ -22,8 +22,9 @@ class DownloadController extends Controller
         $downloads = $this->yt->download(
             Options::create()
                 ->downloadPath(storage_path('/downloads/video'))
+                ->audioQuality(0)
                 ->format('mp4')
-                ->output('%(artist)s - %(title)s.%(ext)s')
+                ->output('%(title)s.%(ext)s')
                 ->url($url)
         );
 
