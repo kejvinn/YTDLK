@@ -3,7 +3,7 @@
         <div class="text-error">
             {{$error}}
         </div>
-        <a href="/" class="text-4xl"><span class="text-red-500">YT</span>D<span class="text-orange-600">L</span>K</a>
+        <a href="/" class="text-4xl"><span class="text-red-500">YT</span>D<span class="text-orange00">L</span>K</a>
         <form wire:submit="search" class="join w-1/2">
             <label
                 class="input input-bordered flex items-center gap-2 w-full join-item">
