@@ -51,13 +51,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir -p /usr/local/bin && \
-    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
-    chmod a+rx /usr/local/bin/yt-dlp
+
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.3
-
-RUN yt-dlp --version
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
@@ -66,6 +62,9 @@ COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.3/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
+
+RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
+    chmod a+rx /usr/local/bin/yt-dlp
 
 EXPOSE 8000
 
