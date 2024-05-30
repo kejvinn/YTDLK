@@ -13,12 +13,11 @@ class DownloadController extends Controller
     public function __construct()
     {
         $this->yt = new YoutubeDl();
+//        $this->yt->setBinPath('/usr/local/bin/yt-dlp');
     }
 
     public function video($url)
     {
-        $this->yt = new YoutubeDl();
-
         $downloads = $this->yt->download(
             Options::create()
                 ->downloadPath(storage_path('/downloads/video'))
@@ -37,9 +36,6 @@ class DownloadController extends Controller
 
     public function audio($url)
     {
-
-        $this->yt = new YoutubeDl();
-
         $downloads = $this->yt->download(
             Options::create()
                 ->downloadPath(storage_path('/downloads/audio'))
