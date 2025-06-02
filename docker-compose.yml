@@ -1,5 +1,5 @@
 services:
-    ytdlk.io:
+    ytdlk.kejvin.com:
         build:
             context: ./docker/8.3
             dockerfile: Dockerfile

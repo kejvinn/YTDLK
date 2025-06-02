@@ -10,8 +10,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5",
         "madcoda/php-youtube-api": "^1.2",
         "norkunas/youtube-dl-php": "dev-master"
     },

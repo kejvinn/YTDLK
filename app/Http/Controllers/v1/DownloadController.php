@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers\v1;
 
+use App\Http\Controllers\Controller;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
