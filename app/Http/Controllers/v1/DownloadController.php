@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers\v1;
 
+use App\Http\Controllers\Controller;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
 
@@ -44,6 +45,7 @@ class DownloadController extends Controller
                 ->output('%(artist)s - %(title)s.%(ext)s')
                 ->url($url)
         );
+
         foreach ($downloads->getVideos() as $audio) {
             return response()->download($audio->getFile())->deleteFileAfterSend(true);
         }

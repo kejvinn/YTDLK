@@ -2,14 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Http\Controllers\DownloadController;
-use App\Http\Controllers\SearchController;
+
+use App\Http\Controllers\v1\DownloadController;
+use App\Http\Controllers\v1\SearchController;
 use Livewire\Component;
 
 class MainContainer extends Component
 {
     public $source = 'YouTube';
-
     public $sourceColor = 'bg-base-200';
 
     public $searchQuery = '';
@@ -17,6 +17,13 @@ class MainContainer extends Component
     public $results = [];
 
     public $error = '';
+
+    private $searchController;
+
+    public function __construct()
+    {
+        $this->searchController = new SearchController();
+    }
 
     public function render()
     {
@@ -34,8 +41,12 @@ class MainContainer extends Component
 
     public function search()
     {
+        $this->validate([
+            'source' => 'required|string|in:YouTube,SoundCloud',
+            'searchQuery' => 'required|string',
+        ]);
         try {
-            $this->results = (new SearchController)->search($this->source, $this->searchQuery);
+            $this->results = $this->searchController->search($this->source, $this->searchQuery);
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
         }
@@ -44,7 +55,7 @@ class MainContainer extends Component
     public function downloadVideo($url)
     {
         try {
-            return (new DownloadController)->video($url);
+            return (new DownloadController())->video($url);
         } catch (\Exception $e) {
             abort(400, $e->getMessage());
         }
