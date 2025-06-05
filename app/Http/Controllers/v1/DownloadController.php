@@ -5,6 +5,7 @@ namespace app\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use YoutubeDl\Options;
 use YoutubeDl\YoutubeDl;
+use function Laravel\Prompts\error;
 
 class DownloadController extends Controller
 {
@@ -17,37 +18,44 @@ class DownloadController extends Controller
 //        $this->yt->setBinPath('/usr/local/bin/yt-dlp');
     }
 
-    public function video($url)
+    public function video($url, $format)
     {
         $downloads = $this->yt->download(
             Options::create()
                 ->downloadPath(storage_path('/downloads/video'))
                 ->audioQuality(0)
-                ->format('mp4')
+                ->format($format)
                 ->output('%(title)s.%(ext)s')
                 ->url($url)
         );
 
         foreach ($downloads->getVideos() as $video) {
-            return response()->download($video->getFile())->deleteFileAfterSend(true);
+            if ($video->getError() !== null) {
+                throw new \Error(
+                    "Error downloading video: {$video->getError()}.");
+            } else {
+                return response()->download($video->getFile())->deleteFileAfterSend(true);
+            }
         }
 
         return back();
     }
 
-    public function audio($url)
+    public function audio(string $url, string $format)
     {
         $downloads = $this->yt->download(
             Options::create()
                 ->downloadPath(storage_path('/downloads/audio'))
                 ->extractAudio(true)
-                ->audioFormat('mp3')
+                ->audioFormat($format)
                 ->output('%(artist)s - %(title)s.%(ext)s')
                 ->url($url)
         );
 
         foreach ($downloads->getVideos() as $audio) {
-            return response()->download($audio->getFile())->deleteFileAfterSend(true);
+            return response()->download($audio->getFile(),
+                headers: ['Content-Type: application/'.$format])
+                ->deleteFileAfterSend(true);
         }
 
         return back();

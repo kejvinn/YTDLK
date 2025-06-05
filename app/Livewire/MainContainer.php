@@ -5,6 +5,7 @@ namespace App\Livewire;
 
 use App\Http\Controllers\v1\DownloadController;
 use App\Http\Controllers\v1\SearchController;
+use Livewire\Attributes\Session;
 use Livewire\Component;
 
 class MainContainer extends Component
@@ -20,6 +21,16 @@ class MainContainer extends Component
 
     private $searchController;
 
+    public $selectedAudio = 'mp3';
+
+    public $selectedVideo = 'mp4';
+
+    public $audioFormats = ['mp3', 'opus', 'm4a'];
+
+    public $videoFormats = [
+        'mp4', 'm4a'
+    ];
+
     public function __construct()
     {
         $this->searchController = new SearchController();
@@ -30,6 +41,12 @@ class MainContainer extends Component
         return view('livewire.main-container');
     }
 
+    public function toggleTheme(){
+        $current = \session('theme', 'retro');
+        session(['theme' => $current === 'retro' ? 'dark' : 'retro']);
+        return redirect(request()->header('Referer'));
+    }
+
     public function changeSource()
     {
         $this->sourceColor = match ($this->source) {
@@ -37,6 +54,16 @@ class MainContainer extends Component
             'SoundCloud' => 'orange-400',
             default => '',
         };
+    }
+
+    public function changeAudioFormat($format)
+    {
+        $this->selectedAudio = $format;
+    }
+
+    public function changeVideoFormat($format)
+    {
+        $this->selectedVideo = $format;
     }
 
     public function search()
@@ -55,7 +82,7 @@ class MainContainer extends Component
     public function downloadVideo($url)
     {
         try {
-            return (new DownloadController())->video($url);
+            return (new DownloadController())->video($url, $this->selectedVideo);
         } catch (\Exception $e) {
             abort(400, $e->getMessage());
         }
@@ -64,7 +91,7 @@ class MainContainer extends Component
     public function downloadAudio($url)
     {
         try {
-            return (new DownloadController)->audio($url);
+            return (new DownloadController)->audio($url, $this->selectedAudio);
         } catch (\Exception $e) {
             abort(400, $e->getMessage());
         }
